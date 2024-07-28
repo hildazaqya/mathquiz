@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Quiz from "./components/Quiz";
 import "./index.css";
+import { Navigate } from "react-router-dom";
 
 function App() {
   return (
