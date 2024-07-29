@@ -6,7 +6,7 @@ class Home extends React.Component {
     return (
       <div className="flex items-center justify-center h-screen">
         <Link to="/quiz/1">
-          <button className="bg-secondary rounded-md p-2 text-base font-bold w-1/3 text-neutral">
+          <button className="bg-secondary rounded-md p-2 text-base font-bold w-[200px] text-neutral">
             Start The Quiz
           </button>
         </Link>
