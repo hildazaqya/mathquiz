@@ -59,7 +59,7 @@ function Login() {
                         Login
                     </button>
                     <button
-                        type="button" // This should not be a submit button
+                        type="button" 
                         className="hidden bg-transparent rounded-md mt-2 text-sm p-1 border border-accent flex items-center justify-center gap-2"
                     >
                         <GoogleIcon />

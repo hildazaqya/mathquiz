@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Timer from "./Timer";
+import TotalQuestions from "./TotalQuestions";
 
 async function getData() {
-    const apiUrl = await fetch("https://opentdb.com/api.php?amount=5&category=19&type=multiple");
+    const apiUrl = await fetch("https://opentdb.com/api.php?amount=10&category=19&type=multiple");
     return apiUrl.json();
 }
 
@@ -15,19 +17,19 @@ function Quiz() {
 
     useEffect(() => {
         async function fetchData() {
-          const quizData = await getData();
-          setDataQuiz(
-            quizData.results.map((question) => ({
-              ...question,
-              answers: shuffleAnswers([
-                ...question.incorrect_answers,
-                question.correct_answer,
-              ]),
-            }))
-          );
+            const quizData = await getData();
+            setDataQuiz(
+                quizData.results.map((question) => ({
+                    ...question,
+                    answers: shuffleAnswers([
+                        ...question.incorrect_answers,
+                        question.correct_answer,
+                    ]),
+                }))
+            );
         }
         fetchData();
-      }, []);
+    }, []);
 
     const shuffleAnswers = (answers) => {
         for (let i = answers.length - 1; i > 0; i--) {
@@ -63,13 +65,14 @@ function Quiz() {
     const currentQuestion = dataQuiz[questionIndex];
     const answers = currentQuestion.answers;
     return (
-        <div className="flex flex-col items-center h-full w-full mx-[50px]">
+        <div className="flex flex-col items-center h-screen w-full px-[50px]">
+            <Timer />
             <div className="p-3">
                 <h3 className="font-semibold text-accent text-3xl">Questions {questionNumber} </h3>
                 <p className="text-base mt-2 text-accent">
                     {currentQuestion.question}
                 </p>
-                <div className="grid grid-cols-2 mt-3 gap-3">
+                <div className="grid grid-cols-2 mt-3 gap-3 max-w-[400px]">
                     {answers.map((answer, index) => (
                         <button
                             key={index}
@@ -101,6 +104,10 @@ function Quiz() {
                         Next Question
                     </button>
                 </div>
+                <TotalQuestions
+                    totalQuestions={dataQuiz.length}
+                    answeredQuestions={selectedAnswer}
+                />
             </div>
         </div>
     );
