@@ -10,7 +10,9 @@ async function getData() {
 
 function Quiz() {
     const [dataQuiz, setDataQuiz] = useState([]);
-    const [selectedAnswer, setSelectedAnswer] = useState({});
+    const [selectedAnswer, setSelectedAnswer] = useState(
+        JSON.parse(localStorage.getItem("selectedAnswer")) || {}
+    );
     const { questionNumber } = useParams();
     const navigate = useNavigate();
     const questionIndex = parseInt(questionNumber);
@@ -18,15 +20,15 @@ function Quiz() {
     useEffect(() => {
         async function fetchData() {
             const quizData = await getData();
-            setDataQuiz(
-                quizData.results.map((question) => ({
-                    ...question,
-                    answers: shuffleAnswers([
-                        ...question.incorrect_answers,
-                        question.correct_answer,
-                    ]),
-                }))
-            );
+            const processedData = quizData.results.map((question) => ({
+                ...question,
+                answers: shuffleAnswers([
+                    ...question.incorrect_answers,
+                    question.correct_answer,
+                ]),
+            }));
+            setDataQuiz(processedData);
+            localStorage.setItem("dataQuiz", JSON.stringify(processedData));
         }
         fetchData();
     }, []);
@@ -40,15 +42,24 @@ function Quiz() {
     };
 
     const handleAnswerClick = (answerIndex) => {
-        setSelectedAnswer((prevSelected) => ({
+        const selectedValue = dataQuiz[questionIndex].answers[answerIndex];
+    
+        setSelectedAnswer((prevSelected) => {
+          const updatedSelection = {
             ...prevSelected,
-            [questionIndex]: answerIndex,
-        }));
-    };
+            [questionIndex]: selectedValue,
+          };
+    
+          localStorage.setItem("selectedAnswer", JSON.stringify(updatedSelection));
+          return updatedSelection;
+        });
+      };
 
     const handleNextQuestion = () => {
         if (questionIndex < dataQuiz.length - 1) {
             navigate(`/quiz/${questionIndex + 1}`)
+        } else {
+            navigate("/results");
         }
     };
 
@@ -56,6 +67,14 @@ function Quiz() {
         if (questionIndex > 0) {
             navigate(`/quiz/${questionIndex - 1}`)
         }
+    };
+
+    const handleSubmit = () => {
+        navigate("/results");
+    }
+
+    const handleTimeUp = () => {
+        navigate("/results");
     };
 
     if (!dataQuiz.length) {
@@ -66,9 +85,11 @@ function Quiz() {
     const answers = currentQuestion.answers;
     return (
         <div className="flex flex-col items-center h-screen w-full px-[50px]">
-            <Timer />
-            <div className="p-3">
-                <h3 className="font-semibold text-accent text-3xl">Questions {questionNumber} </h3>
+            <Timer
+                handleTimeUp={handleTimeUp}
+            />
+            <div className="p-3 w-[500px]">
+                <h3 className="font-semibold text-accent text-3xl">Questions {questionIndex + 1} </h3>
                 <p className="text-base mt-2 text-accent">
                     {currentQuestion.question}
                 </p>
@@ -77,7 +98,7 @@ function Quiz() {
                         <button
                             key={index}
                             className={`flex flex-row gap-3 items-center py-2 px-3
-                                        rounded-md cursor-pointer transition-colors duration 200 ${selectedAnswer[questionIndex] === index
+                                        rounded-md cursor-pointer transition-colors duration 200 ${selectedAnswer[questionIndex] === answer
                                     ? "bg-green-500"
                                     : "bg-gray-500"
                                 }`}
@@ -96,19 +117,27 @@ function Quiz() {
                     >
                         Previous Question
                     </button>
-                    <button
-                        className="font-semibold text-base"
-                        onClick={handleNextQuestion}
-                        disabled={questionIndex === dataQuiz.length - 1}
-                    >
-                        Next Question
-                    </button>
+                    {questionIndex === dataQuiz.length - 1 ? (
+                        <button
+                            className="font-semibold text-base bg-blue-700 text-white px-4 py-2 rounded"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </button>
+                    ) : (
+                        <button
+                            className="font-semibold text-base"
+                            onClick={handleNextQuestion}
+                        >
+                            Next Question
+                        </button>
+                    )}
                 </div>
-                <TotalQuestions
+            </div>
+            <TotalQuestions
                     totalQuestions={dataQuiz.length}
                     answeredQuestions={selectedAnswer}
                 />
-            </div>
         </div>
     );
 }

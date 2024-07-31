@@ -22,6 +22,9 @@ const Timer = () => {
             (minutes > 9 ? minutes : "0" + minutes) + ":" +
             (seconds > 9 ? seconds : "0" + seconds)
         );
+    } else {
+        if (timerRef.current) clearInterval(timerRef.current);
+        handleTimeUp();
     }
    };
 

@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 function TotalQuestions({totalQuestions, answeredQuestions}) {
     return (
-        <div className='w-full flex flex-col justify-start gap-y-2 mt-6'>
+        <div className='w-[500px] flex flex-wrap flex-col justify-start gap-y-2 mt-6'>
             <div className='flex flex-row gap-2 items-center'>
                 {Array.from({ length: totalQuestions }, (_, index) => (
                     <Link
                     key={index}
                     to={`/quiz/${index}`}
-                    className={`p-3 w-1/3 text-center text-base text-neutral gap-1 font-bold rounded-lg
+                    className={`p-3 w-1/2 text-center text-base text-neutral gap-1 font-bold rounded-lg
                     ${answeredQuestions[index] !== undefined
                         ? "bg-success"
                         : "bg-secondary"

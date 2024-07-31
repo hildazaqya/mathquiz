@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Quiz from "./components/Quiz";
+import Results from "./components/Results";
 import "./index.css";
 import { Navigate } from "react-router-dom";
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/quiz" element={<Navigate to="/quiz/1" />} />
         <Route path="/quiz/:questionNumber" element={<Quiz />} />
+        <Route path="/results" element={<Results />} />
       </Routes>
     </Router>
   );
