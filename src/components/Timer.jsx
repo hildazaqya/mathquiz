@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Timer = () => {
+const Timer = ({handleTimeUp}) => {
    const timerRef = useRef(null);
    const [timer, setTimer] = useState("00:00:00");
 
@@ -29,7 +29,7 @@ const Timer = () => {
    };
 
    const clearTime = (endTime) => {
-    setTimer("00:10:00");
+    setTimer("00:05:00");
 
     if (timerRef.current) clearInterval(timerRef.current);
     const id = setInterval(() => {
@@ -40,7 +40,7 @@ const Timer = () => {
 
    const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setMinutes(deadline.getMinutes() + 10);
+    deadline.setMinutes(deadline.getMinutes() + 5);
     return deadline;
    };
 

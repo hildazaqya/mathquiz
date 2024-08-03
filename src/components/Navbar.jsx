@@ -8,6 +8,21 @@ function Navbar() {
         if (storedUsername) {
             setUsername(storedUsername);
         }
+
+        const handleStorageChange = () => {
+            const updatedUsername = localStorage.getItem('username');
+            if (updatedUsername) {
+                setUsername(updatedUsername)
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener('updatedUsername', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('updatedUsername', handleStorageChange);
+        };
     }, []);
 
     return (
