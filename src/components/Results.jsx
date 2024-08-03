@@ -18,6 +18,7 @@ function Results() {
   }).length;
   
   const totalQuestions = dataQuiz.length;
+  const userAnswer = Object.keys(selectedAnswer).length;
   const wrongAnswers = totalQuestions - correctAnswers;
 
   return (
@@ -26,7 +27,7 @@ function Results() {
       <h2 className="font-semibold text-accent text-3xl">{correctAnswers * 10}</h2>
       <p className="text-lg text-green-600 mt-3">Correct Answers: {correctAnswers}</p>
       <p className="text-lg mt-2 text-red-600">Wrong Answers: {wrongAnswers}</p>
-      <p className="text-lg mt-2 text-accent">Number of Questions Answered: {totalQuestions}</p>
+      <p className="text-lg mt-2 text-accent">Number of Questions Answered: {userAnswer}</p>
       <button
         className="mt-5 px-4 py-2 bg-success text-white rounded"
         onClick={() => {
